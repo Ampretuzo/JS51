@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../app').app;
+var init = require('../app').init; // მეორე გამოძახება აღარ უშვებს სკრიპტს, ასე რომ ცუდი არაა ესე
 var debug = require('debug')('snake51:server');
 var http = require('http');
 
@@ -20,6 +21,14 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Once the server is initialized, its time to set up socket io game logic:
+
+var io = require('socket.io')(server);
+init(io);
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 /**
  * Listen on provided port, on all network interfaces.
