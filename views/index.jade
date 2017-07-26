@@ -1,5 +1,10 @@
-extends layout
+extends indexlayout
 
 block content
   h1= title
-  p Welcome to #{title}
+  div
+    form(action= '/game', method= 'get')
+      p= welcome
+      input(type= 'text' name= 'nickname')
+      br
+      input(type= 'submit' value= enter_game)
