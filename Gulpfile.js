@@ -4,7 +4,10 @@
 
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    tap = require('gulp-tap'),
+    buffer = require('gulp-buffer'),
+    browserify = require('browserify');
 
 var clientJs = 'src/client/**/*.js';
 
@@ -16,9 +19,15 @@ gulp.task('default', function() {
 
 gulp.task('client-js', function () {
     return gulp.src(['src/client/drawer.js', 'src/client/test.js', clientJs])
+        .pipe(tap(function (file) {
+            gutil.log('bundling ' + file.path);
+            file.contents = browserify(file.path).bundle();
+        }))
+        // გალპს უნდა ბაფერკონტენტი და არა სტრიმინგ კონტენტი, მოკლედ ერთი ტიპის დინებიდან მეორეში გადაგვყავს რო მილში გავიდეს
+        .pipe(buffer())
         .pipe(concat('bundle.js'))
         .pipe(gulp.dest('public/javascripts/bundle'));
-    // uglify არ მინდა ახლა
+    // uglify არ მინდა ახლა და შესაბამისად sourceMap-იც არ მჭირდება
 });
 
 gulp.task('client-dev', function () {

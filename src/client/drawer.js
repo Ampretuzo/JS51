@@ -53,3 +53,5 @@ var drawer = (function () {
 
     return ret;
 })();
+
+module.exports = drawer;

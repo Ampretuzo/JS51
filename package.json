@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "body-parser": "~1.17.1",
+    "browserify": "^14.4.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
@@ -17,7 +18,10 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-buffer": "0.0.2",
     "gulp-concat": "^2.6.1",
-    "gulp-util": "^3.0.8"
+    "gulp-tap": "^1.0.1",
+    "gulp-util": "^3.0.8",
+    "jquery": "^3.2.1"
   }
 }
