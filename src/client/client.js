@@ -40,7 +40,7 @@ var Game = require('./game-ui'),
         });
         socket.on('death', function (data) {
             alert('you are dead!');
-            // TODO restart
+            socket.disconnect();
         });
         // Feed controls to the server:
         listenKeys();

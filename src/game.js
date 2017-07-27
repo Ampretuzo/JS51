@@ -52,6 +52,7 @@ var GameServer = function (options) {
      * @param direction Snake.directions.---
      */
     this.changeDirection = function(id, direction) {
+        if(players.get(id) == undefined) console.log('player ' + id + ' is dead but tries to change direction');
         console.log('!@#: changing direction of ' + id + ' to ' + direction);
         players.get(id).snake.setDirection(direction);
     };
@@ -85,7 +86,8 @@ var GameServer = function (options) {
                     snake.eat(apples[i]);
                     apples.splice(i, 1);
                     player.score = player.score + config.appleBaseScoreGain;
-                    // TODO ჩამატება უნდა ახალი ვაშლის და ქულის მომატება უნდა მოთამაშეს
+                    var newApple = GameServer.getRandomApple(apples);
+                    apples.push(newApple);
                 }
         }
     }
