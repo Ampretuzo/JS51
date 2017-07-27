@@ -42,5 +42,6 @@ gulp.task('client-sass', function () {
 });
 
 gulp.task('client-dev', function () {
-    gulp.watch([clientJs, sharedJs, clientSassSrc], ['client-js', 'client-sass']);
+    gulp.watch([clientJs, sharedJs], ['client-js']);
+    gulp.watch(clientSassSrc, ['client-sass']);
 });

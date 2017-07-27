@@ -1,0 +1,10 @@
+@import "scheme";
+
+#leaderboard {
+  width: 320px;
+  padding: 20px;
+  background: $tertiaryColor;
+  border-radius: 5px;
+  border-top: 5px solid $secondaryColor;
+  margin: 0 auto;
+}
