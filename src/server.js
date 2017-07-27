@@ -21,7 +21,7 @@ function serve(io) {
 
     function onDirectionChange(playerId, direction) {
         console.log('!@#: player ' + playerId + ' sent direction change to ' + direction);
-        // TODO
+        gameServer.changeDirection(playerId, direction);
     }
 
     function onDeath(playerId) {

@@ -55,10 +55,24 @@ Snake.prototype.advance = function () {
     }
 
     this.body.unshift(newHead);
-}
+};
 
 Snake.prototype.setDirection = function(direction) {
-    this.direction = direction;
+    // ადრე გარეთ იყო ეს ვალიდაცია, ასე ჯობია. თუმცა უნდა განკერძოვდეს გველის მიმართულება ამიტომ... // TODO
+    function backwardsDir(snk) {
+        var delX = snk.body[0][0] - snk.body[1][0];
+        var delY = snk.body[0][1] - snk.body[1][1];
+        if(delX === 1) return Snake.directions.left;
+        if(delX === -1) return Snake.directions.right;
+        if(delY === 1) return Snake.directions.up;
+        if(delY === -1) return Snake.directions.down;
+    }
+    if(direction !== backwardsDir(this) ) {
+        this.direction = direction;
+        console.log('new direction: ' + this.direction);
+    } else {
+        console.log('bad direction!');
+    }
 };
 
 Snake.prototype.head = function() {

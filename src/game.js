@@ -35,7 +35,17 @@ var GameServer = function (options) {
     this.getSnake = function (id) {
         return players.get(id).snake;
     };
-    //
+
+    /**
+     *
+     * @param id player id
+     * @param direction Snake.directions.---
+     */
+    this.changeDirection = function(id, direction) {
+        console.log('!@#: changing direction of ' + id + ' to ' + direction);
+        players.get(id).snake.setDirection(direction);
+    };
+
     // this.getSnakes = function () {
     //     return Array.from(snakes.values() );
     // };
@@ -44,23 +54,6 @@ var GameServer = function (options) {
     //     return apples;
     // };
     //
-    // this.changeDirection = function(id, direction) {
-    //     console.log('changing direction of #' + id + ' to ' + direction);
-    //     function backwardsDirection(id) {
-    //         var delX = snakes.get(id).body[0][0] - snakes.get(id).body[1][0];
-    //         var delY = snakes.get(id).body[0][1] - snakes.get(id).body[1][1];
-    //         if(delX === 1) return Snake.directions.left;
-    //         if(delX === -1) return Snake.directions.right;
-    //         if(delY === 1) return Snake.directions.up;
-    //         if(delY === -1) return Snake.directions.down;
-    //     }
-    //     if(direction !== backwardsDirection(id) ) {
-    //         snakes.get(id).setDirection(direction);
-    //         console.log('direction now: ' + snakes.get(id).direction);
-    //     } else {
-    //         console.log('bad direction!');
-    //     }
-    // };
     //
     // function advance() {
     //     for(snake of Array.from(snakes.values()) ) {
