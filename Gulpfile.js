@@ -7,10 +7,13 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     tap = require('gulp-tap'),
     buffer = require('gulp-buffer'),
-    browserify = require('browserify');
+    browserify = require('browserify'),
+    sass = require('gulp-sass');
 
 var clientJs = 'src/client/**/*.js';
 var sharedJs = 'src/shared/**/*.js';
+var clientSassSrc = 'src/client/styles/scss/**/*.scss';
+var clientStylesDest = 'public/stylesheets';
 
 // create a default task and just log a message
 gulp.task('default', function() {
@@ -32,6 +35,12 @@ gulp.task('client-js', function () {
     // uglify არ მინდა ახლა და შესაბამისად sourceMap-იც არ მჭირდება
 });
 
+gulp.task('client-sass', function () {
+    return gulp.src(clientSassSrc)
+        .pipe(sass())
+        .pipe(gulp.dest(clientStylesDest));
+});
+
 gulp.task('client-dev', function () {
-    gulp.watch([clientJs, sharedJs], ['client-js']);
+    gulp.watch([clientJs, sharedJs, clientSassSrc], ['client-js', 'client-sass']);
 });
