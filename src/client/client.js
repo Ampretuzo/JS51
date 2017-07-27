@@ -58,7 +58,6 @@ var Game = require('./game-ui'),
         var snakes = snakeParametersArray.map(function(snakeParameters) {
             return new Snake(snakeParameters.color, null, snakeParameters.body);
         });
-        debugger;
         game.updateWorld(snakes, apples);
         game.updateLeaderboard(leaderboard);
     }

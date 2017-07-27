@@ -9,6 +9,12 @@ var config = require('../src/config');
 router.get('/', function(req, res, next) {
     var nickname = req.query.nickname;
     var gameConfig = config;
+    var styleFile;
+    if(Math.random() > 0.5)
+        styleFile = '/stylesheets/game.css';
+    else
+        styleFile = '/stylesheets/game2.css';
+    gameConfig.style = styleFile;
     res.render('game', gameConfig);
 });
 

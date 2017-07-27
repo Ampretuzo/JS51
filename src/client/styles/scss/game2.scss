@@ -1,0 +1,59 @@
+@import "scheme";
+
+// არ ვარგა მარა არაუშავს
+
+body {
+  background-color: $secondaryColor;
+}
+
+#arena {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  display: inline-block;
+  height: 600px;
+  width: 600px;
+  background: $primaryColor;
+  border: 10px $secondaryColor;
+  border-radius: 10px;
+}
+
+#leaderboard {
+  font-family: $fortFamily;
+  overflow: hidden;
+  border-radius: 15px;
+  position: absolute;
+  top: 13px;
+  left: 635px;
+  display: inline-block;
+  background: $tertiaryColor;
+  width: 300px;
+  height: 600px;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+
+ol {
+  overflow-y: auto;
+}
+
+li {
+  width: 100%;
+}
+
+.username {
+  width: 210px;
+  display: inline-block;
+}
+
+.score {
+  width: 25px;
+  font-weight: 800;
+  font-size: 20px;
+  text-align: center;
+  display: inline-block;
+}

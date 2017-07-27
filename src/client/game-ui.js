@@ -36,7 +36,7 @@ var Game = function($, containerValue, drawerValue, leaderBoardContainerValue) {
         var $ol = $leaderBoardContainer.find('ol');
         $ol.empty();
         for(leader of leaderboard) {
-            $ol.append('<li>' + leader.nickname + ' - ' + leader.score + '</li>');
+            $ol.append('<li><span class="username">' + leader.nickname + '</span><span class="score>">' + leader.score + '</span></li>');
         }
     }
 };
