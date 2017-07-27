@@ -12,12 +12,19 @@ function serve(io) {
             onDeath(playerId, client);
         });
         console.log('!@#: player created with id:' + client.id + ', he goes by the name of: ' + playerId);
-        client.emit('joined');
+        client.on('pre-join', function (data) {
+            onPreJoin(client, playerId, data.nickname);
+        });
         // დავარეგისტრიროთ კონტროლები
         client.on('change_dir', function (data) {
             onDirectionChange(playerId, data.direction);
         });
     });
+
+    function onPreJoin(client, playerId, nickname) {
+        gameServer.setNickname(playerId, nickname);
+        client.emit('joined');
+    }
 
     function onDirectionChange(playerId, direction) {
         console.log('!@#: player ' + playerId + ' sent direction change to ' + direction);
@@ -37,9 +44,11 @@ function serve(io) {
             };
         });
         var apples = gameServer.getApples();
+        var leaderboard = gameServer.getLeaders(3); // 3 მეყოფა
         io.emit('update', {
             snakes: snakeIngredients,
-            apples: apples
+            apples: apples,
+            leaderboard: leaderboard
         });
         gameServer.worldTick();
     }, 100);

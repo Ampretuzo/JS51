@@ -4,6 +4,9 @@
 
 var config = require('./config');
 
+// TODO მკვდარსაც შეუძლია კონტროლების გამოგზავნა, ამიტომ შემოწმებები უნდა ყველგან სანამ players.get(i).snake მოხდება,
+// იდეალურ შემთხვევაში კლასი უნდა იყოს მოთამაშის კიდე ცალკე მარა რაცაა იყოს ახლა..
+
 var GameServer = function (options) {
     console.log('!@#: game logic ctor goin on..');
     var Snake = require('./shared/snake');
@@ -12,11 +15,18 @@ var GameServer = function (options) {
      * მოთამაშე არის:
      * {
      *  snake: {...},
-     *  deathCallback: function() {...}
+     *  deathCallback: function() {...},
+     *  nickname: 'asd',
+     *  score: 100
      * }
      */
     var players = new Map();
-    var apples = [[5, 5], [9, 9]];
+    var apples = [];
+
+    // საწყისი ვაშლების ჩაყრა
+    for(var i = 0; i < config.initialNumApples; i++) {
+        apples.push(GameServer.getRandomApple(apples) );
+    }
 
     this.createNewSnake = function (onDeathFn) {
         var playerId = player_cnt++;
@@ -25,15 +35,13 @@ var GameServer = function (options) {
         var newSnake = new Snake(GameServer.getRandomColor(), Snake.directions.right, [ [3, 0], [2, 0], [1, 0], [0, 0] ] );
         players.set(playerId, {
             snake: newSnake,
-            deathCallback: onDeathFn
+            deathCallback: onDeathFn,
+            nickname: null,
+            score: 0
         });
         return playerId;
     };
-    //
-    // this.onDeath = function(id, callback) {
-    //     death_callbacks.set(id, callback);
-    // };
-    //
+
     this.getSnake = function (id) {
         return players.get(id).snake;
     };
@@ -76,6 +84,8 @@ var GameServer = function (options) {
                 if(snake.head().join() === apples[i].join() ) {
                     snake.eat(apples[i]);
                     apples.splice(i, 1);
+                    player.score = player.score + config.appleBaseScoreGain;
+                    // TODO ჩამატება უნდა ახალი ვაშლის და ქულის მომატება უნდა მოთამაშეს
                 }
         }
     }
@@ -95,8 +105,8 @@ var GameServer = function (options) {
         }
 
         function outOfBounds(head) {
-            if(head[0] < 0 || head[0] > config.tiles) return true;
-            if(head[1] < 0 || head[1] > config.tiles) return true;
+            if(head[0] < 0 || head[0] >= config.tiles) return true;
+            if(head[1] < 0 || head[1] >= config.tiles) return true;
             return false;
         }
 
@@ -119,10 +129,28 @@ var GameServer = function (options) {
      * Moves clock one tick further.
      */
     this.worldTick = function() {
-        // TODO
         kill();
         eat();
         advance();
+    };
+
+    this.setNickname = function(playerId, nickname) {
+        players.get(playerId).nickname = nickname;
+    };
+
+    this.getLeaders = function (limit) {
+        var board = Array.from(players.values() ).map(function (player) {
+            return {
+                nickname: player.nickname,
+                score: player.score
+            };
+        });
+        var leaderBoard = board;
+        leaderBoard.sort(function (a, b) {
+            return b.score - a.score;
+        });
+        leaderBoard.slice(0, 0 + limit);
+        return leaderBoard;
     }
 };
 
@@ -135,6 +163,18 @@ GameServer.getRandomColor = function() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+};
+
+GameServer.getRandomApple = function (currentApples) {
+    var x, y;
+    while(true) {
+        x = Math.floor((Math.random() * config.tiles) );
+        y = Math.floor((Math.random() * config.tiles) );
+        if(currentApples.map(function (apple) {
+            return apple.join();
+        }).indexOf([x, y].join()) === -1) break;
+    }
+    return [x, y];
 };
 
 module.exports = GameServer;

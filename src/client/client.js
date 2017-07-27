@@ -8,7 +8,8 @@ var Game = require('./game-ui'),
     drawer = require('./drawer'),
     jQuery = require('jquery'),
     io = require('socket.io-client'),
-    Snake = require('../shared/snake');
+    Snake = require('../shared/snake'),
+    util = require('./util');
 
 // start anonymous function to avoid variable collision in the future -- ეს აღარაა საჭირო უსაფრთხოებისთვის
 // ვინაიდან და რადგანაც ახლა browserify-ს ვიყენებ, მარა legacy კოდი legacy კოდია...
@@ -17,21 +18,25 @@ var Game = require('./game-ui'),
     var socket;
 
     $(document).ready(function() {
+        // სტრიქტით რო მექნა ამას აღარ დაუშვებდა, ცუდი ისაა რო ნებისმიერ შემთხვევაში ლიკავს ასეთი დეკლარაცია გლობალურში
+        // ახლა იყოს ასე არაუშავს
         $arena = $('#arena');
+        $leaderBoardContainer = $('#leaderboard');  // div არის ეს
         socket = io.connect(document.location.origin);
+        socket.emit('pre-join', {nickname: util.getUrlParameters(window.location.href, 'nickname') });
         socket.on('joined', function (data) {
-            onJoin(/* data.id */);
+            onJoin(socket/* data.id */);
         });
 
     });
 
-    function onJoin() {
+    function onJoin(socket) {
         console.log('joined to game');
         // Initialize game object
-        game = new Game($, $arena, drawer);
+        game = new Game($, $arena, drawer, $leaderBoardContainer);
         // აპდეიტი რომ მოხდა შეგვატყობინებს სერვერი, ჩვენ უნდა მოვთხოვოთ რა მოხდა
         socket.on('update', function(data) {
-            onWorldTick(data.snakes, data.apples);
+            onWorldTick(data.snakes, data.apples, data.leaderboard);
         });
         socket.on('death', function (data) {
             alert('you are dead!');
@@ -39,6 +44,16 @@ var Game = require('./game-ui'),
         });
         // Feed controls to the server:
         listenKeys();
+    }
+
+    function onWorldTick (snakeParametersArray, apples, leaderboard) {
+        // მოვთხოვოთ სერვერს ახალი მდგომარეობა
+        var snakes = snakeParametersArray.map(function(snakeParameters) {
+            return new Snake(snakeParameters.color, null, snakeParameters.body);
+        });
+        debugger;
+        game.updateWorld(snakes, apples);
+        game.updateLeaderboard(leaderboard);
     }
 
     function listenKeys() {
@@ -66,14 +81,6 @@ var Game = require('./game-ui'),
             if(typeof socket != 'undefined')
                 socket.emit('change_dir', {direction: direction} );
         });
-    }
-
-    function onWorldTick (snakeParametersArray, apples) {
-        // მოვთხოვოთ სერვერს ახალი მდგომარეობა
-        var snakes = snakeParametersArray.map(function(snakeParameters) {
-            return new Snake(snakeParameters.color, null, snakeParameters.body);
-        });
-        game.updateWorld(snakes, apples);
     }
 
 })(document, jQuery, io, drawer, Game);

@@ -2,8 +2,11 @@
  * Created by aro on 7/27/17.
  */
 
-var Game = function($, containerValue, drawerValue) {
+var Game = function($, containerValue, drawerValue, leaderBoardContainerValue) {
+    // NOTE: რადგან კლიენტში ესენი გლობალური იყო ახლა ეს უბრალოდ გადააწერს თავზე, not good, მარა იყოს
     var $arena = $(containerValue);
+    var $leaderBoardContainer = $(leaderBoardContainerValue);
+
     var width_log = $arena.attr('width_log'),
         height_log = $arena.attr('height_log');
     var drawer = drawerValue;
@@ -28,6 +31,14 @@ var Game = function($, containerValue, drawerValue) {
         else
             console.log('no apples passed to draw');
     };
+
+    this.updateLeaderboard = function (leaderboard) {
+        var $ol = $leaderBoardContainer.find('ol');
+        $ol.empty();
+        for(leader of leaderboard) {
+            $ol.append('<li>' + leader.nickname + ' - ' + leader.score + '</li>');
+        }
+    }
 };
 
 module.exports = Game;

@@ -5,5 +5,7 @@
 module.exports = {
     title: 51,
     size: 300,
-    tiles: 50
+    tiles: 50,
+    initialNumApples: 10,
+    appleBaseScoreGain: 10
 };
