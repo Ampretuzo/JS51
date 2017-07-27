@@ -28,6 +28,21 @@ function serve(io) {
         console.log('!@#: player with id ' + playerId + ' died_');
         // TODO
     }
+
+    var update = setInterval(function() {
+        var snakeIngredients = gameServer.getSnakes().map(function (snake) {
+            return {
+                body: snake.body,
+                color: snake.getColor()
+            };
+        });
+        var apples = gameServer.getApples();
+        io.emit('update', {
+            snakes: snakeIngredients,
+            apples: apples
+        });
+        gameServer.updateView();
+    }, 100);
 }
 
 // არ მუშაობს პირდაპირ exports = ... რატომ არ ვიცი

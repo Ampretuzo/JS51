@@ -31,10 +31,11 @@ var Game = require('./game-ui'),
         game = new Game($, $arena, drawer);
         // აპდეიტი რომ მოხდა შეგვატყობინებს სერვერი, ჩვენ უნდა მოვთხოვოთ რა მოხდა
         socket.on('update', function(data) {
-            // TODO
+            onWorldTick(data.snakes, data.apples);
         });
         socket.on('death', function (data) {
             alert('you are dead!');
+            // TODO restart
         });
         // Feed controls to the server:
         listenKeys();
@@ -65,6 +66,14 @@ var Game = require('./game-ui'),
             if(typeof socket != 'undefined')
                 socket.emit('change_dir', {direction: direction} );
         });
+    }
+
+    function onWorldTick (snakeParametersArray, apples) {
+        // მოვთხოვოთ სერვერს ახალი მდგომარეობა
+        var snakes = snakeParametersArray.map(function(snakeParameters) {
+            return new Snake(snakeParameters.color, null, snakeParameters.body);
+        });
+        game.updateView(snakes, apples);
     }
 
 })(document, jQuery, io, drawer, Game);

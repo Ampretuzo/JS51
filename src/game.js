@@ -14,7 +14,7 @@ var GameServer = function (options) {
      * }
      */
     var players = new Map();
-    var apples = [];
+    var apples = [[5, 5], [9, 9]];
 
     this.createNewSnake = function (onDeathFn) {
         var playerId = player_cnt++;
@@ -46,15 +46,20 @@ var GameServer = function (options) {
         players.get(id).snake.setDirection(direction);
     };
 
-    // this.getSnakes = function () {
-    //     return Array.from(snakes.values() );
-    // };
-    //
-    // this.getApples = function () {
-    //     return apples;
-    // };
-    //
-    //
+    /**
+     * snake ass hoes
+     * @returns {*|{}|Array}
+     */
+    this.getSnakes = function () {
+        var playersArray = Array.from(players.values() );
+        return playersArray.map(function (player) { return player.snake; });
+    };
+
+    this.getApples = function () {
+        return apples;
+    };
+
+
     // function advance() {
     //     for(snake of Array.from(snakes.values()) ) {
     //         snake.advance();
@@ -104,12 +109,13 @@ var GameServer = function (options) {
     //         }
     //     }
     // }
-    //
-    // this.updateView = function() {
-    //     kill();
-    //     eat();
-    //     advance();
-    // }
+
+    this.updateView = function() {
+        // TODO
+        // kill();
+        // eat();
+        // advance();
+    }
 };
 
 // static method
