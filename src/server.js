@@ -9,7 +9,7 @@ function serve(io) {
     console.log('!@#: Starting game');
     io.on('connection', function(client) {
         var playerId = gameServer.createNewSnake(function () {
-            onDeath(playerId);
+            onDeath(playerId, client);
         });
         console.log('!@#: player created with id:' + client.id + ', he goes by the name of: ' + playerId);
         client.emit('joined');
@@ -24,9 +24,9 @@ function serve(io) {
         gameServer.changeDirection(playerId, direction);
     }
 
-    function onDeath(playerId) {
+    function onDeath(playerId, client) {
         console.log('!@#: player with id ' + playerId + ' died_');
-        // TODO
+        client.emit('death');
     }
 
     var update = setInterval(function() {

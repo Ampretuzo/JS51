@@ -5,5 +5,5 @@
 module.exports = {
     title: 51,
     size: 300,
-    tiles: 20
+    tiles: 50
 };

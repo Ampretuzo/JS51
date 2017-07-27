@@ -2,6 +2,8 @@
  * Created by aro on 7/27/17.
  */
 
+var config = require('./config');
+
 var GameServer = function (options) {
     console.log('!@#: game logic ctor goin on..');
     var Snake = require('./shared/snake');
@@ -67,62 +69,65 @@ var GameServer = function (options) {
         }
     }
 
-    // function eat() {
-    //     for(snake of Array.from(snakes.values()) )
-    //         for(var i = 0; i < apples.length; i++)
-    //             if(snake.head().join() === apples[i].join() ) {
-    //                 snake.eat(apples[i]);
-    //                 apples.splice(i, 1);
-    //             }
-    // }
-    //
-    // function hitOtherSnake(snake) {
-    //     for(id of Array.from(snakes.keys() ) ) {
-    //         var enemy = snakes.get(id);
-    //         if(enemy.killed(snake) ) return true;
-    //     }
-    //     return false;
-    // }
-    //
-    // function kill() {
-    //     function outOfBounds(head) {
-    //         if(head[0] < 0 || head[0] > 50) return true;
-    //         if(head[1] < 0 || head[1] > 50) return true;
-    //         return false;
-    //     }
-    //
-    //     for(id of Array.from(snakes.keys() ) ) {
-    //         var head = snakes.get(id).head();
-    //         if(outOfBounds(head) ) {
-    //             if(typeof death_callbacks.get(id) != 'undefined')
-    //             {
-    //                 (death_callbacks.get(id) )();
-    //                 snakes.delete(id);
-    //                 death_callbacks.delete(id);
-    //                 continue;
-    //             }
-    //         }
-    //         if(hitOtherSnake(snakes.get(id)) ) {
-    //             console.log('snake with id' + id + 'killed by other snake');
-    //             (death_callbacks.get(id) )();
-    //             snakes.delete(id);
-    //             death_callbacks.delete(id);
-    //         }
-    //     }
-    // }
+    function eat() {
+        for(player of Array.from(players.values() ) ) {
+            var snake = player.snake;
+            for(var i = 0; i < apples.length; i++)
+                if(snake.head().join() === apples[i].join() ) {
+                    snake.eat(apples[i]);
+                    apples.splice(i, 1);
+                }
+        }
+    }
+
+    function hitOtherSnake(snake) {
+        for(id of Array.from(players.keys() ) ) {
+            var enemy = players.get(id).snake;
+            if(enemy.killed(snake) ) return true;
+        }
+        return false;
+    }
+
+    function kill() {
+        function killSnake(id) {
+            (players.get(id).deathCallback) ();
+            players.delete(id);
+        }
+
+        function outOfBounds(head) {
+            if(head[0] < 0 || head[0] > config.tiles) return true;
+            if(head[1] < 0 || head[1] > config.tiles) return true;
+            return false;
+        }
+
+        for(id of Array.from(players.keys() ) ) {
+
+            // თუ თავი გაცდა საზღრებს სიკვდილია
+            if(outOfBounds(players.get(id).snake.head() ) ) {
+                killSnake(id);
+                continue;
+            }
+            if(hitOtherSnake(players.get(id).snake) ) {
+                console.log('!@#: player ' + id + ' got killed by the other snake');
+                killSnake(id);
+                // TODO ქულა უნდა დაემატოს მკვლელს მერე
+            }
+        }
+    }
 
     /**
      * Moves clock one tick further.
      */
     this.worldTick = function() {
         // TODO
-        // kill();
-        // eat();
+        kill();
+        eat();
         advance();
     }
 };
 
 // static method
+// FIXME აქ პრობლემაა, ერთიდაიგივე ფერზე ებმევა ყველა გველი
 GameServer.getRandomColor = function() {
     var letters = '0123456789ABCDEF';
     var color = '#';
