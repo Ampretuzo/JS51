@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     browserify = require('browserify');
 
 var clientJs = 'src/client/**/*.js';
+var sharedJs = 'src/shared/**/*.js';
 
 // create a default task and just log a message
 gulp.task('default', function() {
@@ -18,7 +19,8 @@ gulp.task('default', function() {
 });
 
 gulp.task('client-js', function () {
-    return gulp.src(['src/client/drawer.js', 'src/client/test.js', clientJs])
+    // explicit order if needed: ['src/client/drawer.js', 'src/client/game-ui.js', 'src/shared/snake.js',  'src/client/client.js']
+    return gulp.src([sharedJs, clientJs])
         .pipe(tap(function (file) {
             gutil.log('bundling ' + file.path);
             file.contents = browserify(file.path).bundle();
@@ -31,5 +33,5 @@ gulp.task('client-js', function () {
 });
 
 gulp.task('client-dev', function () {
-    gulp.watch(clientJs, ['client-js']);
+    gulp.watch([clientJs, sharedJs], ['client-js']);
 });
