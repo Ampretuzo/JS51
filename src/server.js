@@ -41,7 +41,7 @@ function serve(io) {
             snakes: snakeIngredients,
             apples: apples
         });
-        gameServer.updateView();
+        gameServer.worldTick();
     }, 100);
 }
 

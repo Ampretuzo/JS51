@@ -60,12 +60,13 @@ var GameServer = function (options) {
     };
 
 
-    // function advance() {
-    //     for(snake of Array.from(snakes.values()) ) {
-    //         snake.advance();
-    //     }
-    // }
-    //
+    function advance() {
+        var playersArray = Array.from(players.values());
+        for(var i = 0; i < playersArray.length; i++) {
+            playersArray[i].snake.advance();
+        }
+    }
+
     // function eat() {
     //     for(snake of Array.from(snakes.values()) )
     //         for(var i = 0; i < apples.length; i++)
@@ -110,11 +111,14 @@ var GameServer = function (options) {
     //     }
     // }
 
-    this.updateView = function() {
+    /**
+     * Moves clock one tick further.
+     */
+    this.worldTick = function() {
         // TODO
         // kill();
         // eat();
-        // advance();
+        advance();
     }
 };
 

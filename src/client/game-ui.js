@@ -17,7 +17,7 @@ var Game = function($, containerValue, drawerValue) {
         height_log
     ]);
 
-    this.updateView = function(snakes, apples) {
+    this.updateWorld = function(snakes, apples) {
         drawer.drawArena();
         if(snakes != null)
             snakes.forEach(function (snake) { drawer.drawSnake(snake); });
