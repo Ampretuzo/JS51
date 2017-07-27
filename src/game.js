@@ -92,9 +92,10 @@ var GameServer = function (options) {
         }
     }
 
+    // აბრუნებს დადებითს თუ გადაცემული გველი მოკვდა
     function hitOtherSnake(snake) {
-        for(id of Array.from(players.keys() ) ) {
-            var enemy = players.get(id).snake;
+        for(player of Array.from(players.values() ) ) {
+            var enemy = player.snake;
             if(enemy.killed(snake) ) return true;
         }
         return false;
@@ -113,6 +114,7 @@ var GameServer = function (options) {
         }
 
         for(id of Array.from(players.keys() ) ) {
+            if(!players.get(id) ) continue;
 
             // თუ თავი გაცდა საზღრებს სიკვდილია
             if(outOfBounds(players.get(id).snake.head() ) ) {
@@ -176,6 +178,7 @@ GameServer.getRandomApple = function (currentApples) {
             return apple.join();
         }).indexOf([x, y].join()) === -1) break;
     }
+    // TODO რომელიმე გველს აჯდება თუ არა ეგეც რომ ვნახოთ კაია მარა იყოს ახლა ისე როგორც არის
     return [x, y];
 };
 

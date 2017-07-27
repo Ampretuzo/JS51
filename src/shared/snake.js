@@ -79,6 +79,11 @@ Snake.prototype.head = function() {
     return this.body[0];
 };
 
+/**
+ * returns true if this snake killed the other snake.
+ * @param otherSnake
+ * @returns {boolean}
+ */
 Snake.prototype.killed = function (otherSnake) {
     var otherHead = otherSnake.head();
     for (var i = 0; i < this.body.length; i++) {

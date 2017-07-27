@@ -18,6 +18,10 @@ var Game = require('./game-ui'),
     var socket;
 
     $(document).ready(function() {
+        startGame();
+    });
+
+    function startGame() {
         // სტრიქტით რო მექნა ამას აღარ დაუშვებდა, ცუდი ისაა რო ნებისმიერ შემთხვევაში ლიკავს ასეთი დეკლარაცია გლობალურში
         // ახლა იყოს ასე არაუშავს
         $arena = $('#arena');
@@ -27,8 +31,7 @@ var Game = require('./game-ui'),
         socket.on('joined', function (data) {
             onJoin(socket/* data.id */);
         });
-
-    });
+    }
 
     function onJoin(socket) {
         console.log('joined to game');
@@ -39,8 +42,12 @@ var Game = require('./game-ui'),
             onWorldTick(data.snakes, data.apples, data.leaderboard);
         });
         socket.on('death', function (data) {
-            alert('you are dead!');
             socket.disconnect();
+            var again = confirm('სიკვდილი, კიდე?');
+            if(again) startGame(); else {
+                alert('TODO');
+                window.location.href = '/';
+            }
         });
         // Feed controls to the server:
         listenKeys();
